@@ -105,7 +105,7 @@
             margin-left: 85px;
         }
 
-        #additionalinformation {
+        .add {
             width: 590px;
             height: 60px;
         }
@@ -146,11 +146,11 @@
 
             <div class="div">
                 <label>Supply Time &nbsp;&nbsp;</label>
-                <input type="checkbox">Immediatly
-                <input type="checkbox">within 3-7 Days
+                <input type="radio" name="SupplyTime" id="supply" value="Immediatly">Immediatly
+                <input type="radio" name="SupplyTime" id="supp" value="within 3-7 Days">within 3-7 Days
             </div>
 
-            <!-- Grauatin & experions -->
+            <!-- Grauatin & deopdown box -->
 
             <div class="div">
                 <label class="exp">Remarks &nbsp;</label>
@@ -161,7 +161,7 @@
             <div class="div">
                 <label>Material Type &nbsp;</label>
                 <select id="material">
-                    <option>Select Material</option>
+                    <option disabled selected hidden>Select Material</option>
                     <option>Cotton</option>
                     <option>Cellulosic</option>
                     <option>fibres/viscose</option>
@@ -173,7 +173,7 @@
 
                 <label id="dep">Colors &nbsp;</label>
                 <select id="color">
-                    <option>Select Color</option>
+                    <option disabled selected hidden>Select Color</option>
                     <option>lightskyblue</option>
                     <option>Lightgray</option>
                     <option>Red</option>
@@ -189,14 +189,14 @@
 
             <div class="div">
                 <label>Additional Information</label>
-                <input type="text" id="additionalinformation">
+                <input type="text" id="additionalInformation" class="add">
             </div>
 
             <!-- agree condition -->
 
             <div class="div" id="lab">
-                <input type="checkbox">Information provied above are correct.<br>
-                <input type="checkbox">I agree to all <span>Terms</span> & <span> Conditions</span>...
+                <input type="checkbox" id="inform" value="Information">Information provied above are correct.<br>
+                <input type="checkbox" id="agree" value="agree">I agree to all <span>Terms</span> & <span> Conditions</span>...
             </div>
 
             <!-- button -->
@@ -207,100 +207,249 @@
     <script>
         function formValidation() {
 
-            let suppliername = document.getElementById("suppliername").value;
-            let supplier = document.getElementById("supplier").value;
-            let email = document.getElementById("email").value;
-            let password = document.getElementById("password").value;
-            let remarks = document.getElementById("remarks").value;
-            let additionalinformation = document.getElementById("additionalinformation").value;
+            let supplierName = document.getElementById("suppliername").value;
+            let SupplierId = document.getElementById("supplier").value;
+            let emailId = document.getElementById("email").value;
+            let Password = document.getElementById("password").value;
+            let supplies = document.getElementsByName("SupplyTime");
+            let remark = document.getElementById("remarks").value;
+            let materialType = document.getElementById("material").value;
+            let colorType = document.getElementById("color").value;
+            let additionalInformation = document.getElementById("additionalInformation").value;
+            let policys = "";
+            let errorCount = 0;
 
-            // suppliername & supplierid validation
 
-            if (isNaN(suppliername)) {
-                document.getElementById("suppliername").style.borderColor = "green";
+            //namevalidation
+
+            let number = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+
+            let supplierNameError = false;
+            document.getElementById('suppliername').value.split("").map(function (e, i) {
+                if (number.includes(document.getElementById('suppliername').value[i])) {
+                    supplierNameError = true;
+                }
+            });
+            if (supplierName.length == "" || supplierNameError === true) {
+                document.getElementById('suppliername').style.borderColor = "red"
+                errorCount++
             }
             else {
-                document.getElementById("suppliername").style.borderColor = "red";
+                document.getElementById('suppliername').style.borderColor = "green"
             }
 
-            if (!isNaN(supplier)) {
-                document.getElementById("supplier").style.borderColor = "green";
+
+            //idvalidation
+
+            let alphabets = "A-Za-z"
+            let supplierIdError = false;
+            document.getElementById("supplier").value.split("").map(function (e, i) {
+                if (alphabets.includes(document.getElementById("supplier").value[i])) {
+                    supplierIdError = true;
+                }
+            })
+
+            if (SupplierId.length == "" || supplierIdError == true) {
+                document.getElementById('supplier').style.borderColor = "red"
+                errorCount++
             }
             else {
-                document.getElementById("supplier").style.borderColor = "red";
+                document.getElementById('supplier').style.borderColor = "green"
             }
 
-            //email&password validation
 
-            if ((email.includes('@') && email.includes('.')) && (email.includes('com') || email.includes('in'))) {
+            //emailvalidation
+
+            if ((emailId.includes('@') && emailId.includes('.')) && (emailId.includes('com') || emailId.includes('in'))) {
                 document.getElementById("email").style.borderColor = "green";
             }
             else {
                 document.getElementById("email").style.borderColor = "red";
+                errorCount++
             }
 
-            if (isNaN(password)) {
-                document.getElementById("password").style.borderColor = "green";
-            }
-            else {
-                document.getElementById("password").style.borderColor = "red";
-            }
 
-            //remarks validations
+            //passwordvalidation
 
-            if (isNaN(remarks)) {
-                document.getElementById("remarks").style.borderColor = "green";
-            }
-            else {
-                document.getElementById("remarks").style.borderColor = "red";
-            }
-
-            //additionalinformation validation
-
-            if (isNaN(additionalinformation)) {
-                document.getElementById("additionalinformation").style.borderColor = "green";
-            }
-            else {
-                document.getElementById("additionalinformation").style.borderColor = "red";
-            }
-
-            if (gender == "Gender") {
-                document.getElementById('gender').style.borderColor = "red";
+            if (Password.length == 0 || Password.length < 8) {
+                document.getElementById('password').style.borderColor = "red"
                 errorCount++
             }
             else {
-                document.getElementById("gender").style.borderColor = "green";
+                document.getElementById('password').style.borderColor = "green"
             }
+
+
+            //GenderValidation
+
+            let suppliesVal = false;
+
+            for (let i = 0; i < supplies.length; i++) {
+                if (supplies[i].checked == true) {
+                    suppliesVal = true;
+                }
+            }
+
+            if (!suppliesVal) {
+                alert("Plesese choose Supply");
+                errorCount++
+                return false;
+            }
+
+
+            //remark validation
+
+            let remarkError = false;
+            document.getElementById('remarks').value.split("").map(function (e, i) {
+                if (number.includes(document.getElementById('remarks').value[i])) {
+                    remarkError = true;
+                }
+            })
+
+            if (remark.length == 0 || remarkError == true) {
+                document.getElementById('remarks').style.borderColor = "red"
+                errorCount++
+            }
+            else {
+                document.getElementById('remarks').style.borderColor = "green"
+            }
+
+
+             //material & color validation
+
+             if(materialType == "Select Material"){
+               document.getElementById("material").style.borderColor="red";
+               errorCount++
+            }
+            else{
+                document.getElementById("material").style.bordercolor="green";
+            }
+
+            if(colorType == "Select Color"){
+                document.getElementById("color").style.borderColor="red";
+                errorCount++
+            }
+            else{
+                document.getElementById("color").style.bordercolor="green";
+            }
+
+
+            //additionalinformation validation
+
+            let additionalError = false;
+            document.getElementById('additionalInformation').value.split("").map(function (e, i) {
+                if (number.includes(document.getElementById('additionalInformation').value[i])) {
+                    additionalError = true;
+                }
+            })
+
+            if (additionalInformation.length == 0 || additionalError == true) {
+                document.getElementById('additionalInformation').style.borderColor = "red"
+                errorCount++
+            }
+            else {
+                document.getElementById('additionalInformation').style.borderColor = "green"
+            }
+            
+
+            //policys validation
+
+            if(document.getElementById("inform").checked == true){
+                policys = "given Information correct"
+            }
+            else if(document.getElementById("agree").checked == true){
+                policys = "Agreed"
+            }
+            else{
+                alert("Please select the terms & condition")
+                errorCount++
+            }
+
+            if(errorCount == 0){
+                alert("Your Supply data has been Succesfully Submited")
+            }
+            else{
+                alert("Plese Check the Error")
+            }
+
         }
 
 
-        let name = "barath"
-        let name2 = new String("barath")
-        let fullname = `my name is ${name},`;
-
-        console.log(name.replace("barath", "kaviya"))
-        console.log(fullname)
-
-        let players = [
-            {
-                playerid: 18,
-                game: "cricket",
-                playerName: "virat",
-                hunders: 546,
-            },
-            {
-                playerid: 10,
-                game: "cricket",
-                playerName: "sachin",
-                hunders: 687,
-                qualification: {
-                    mark8th: 395,
-                    mark10th: 456,
-                },
-            }
-        ]
+        let TrendzApperals = {
+            supplierName: supplierName,
+            supplierName: suppliername,
+            supplierId: supplier,
+            email: email,
+            password: password,
+            remarks: remarks,
+            additionalInformation: additionalInformation,
+        }
 
 
+            // // suppliername & supplierid validation
+
+            // if (isNaN(supplierName)) {
+            //     document.getElementById("suppliername").style.borderColor = "green";
+            // }
+            // else {
+            //     document.getElementById("suppliername").style.borderColor = "red";
+            // }
+
+
+
+
+            // if (isNaN(supplier)) {
+            //     document.getElementById("supplier").style.borderColor = "green";
+            // }
+            // else {
+            //     document.getElementById("supplier").style.borderColor = "red";
+            // }
+
+            // //email&password validation
+
+            // if ((email.includes('@') && email.includes('.')) && (email.includes('com') || email.includes('in'))) {
+            //     document.getElementById("email").style.borderColor = "green";
+            // }
+            // else {
+            //     document.getElementById("email").style.borderColor = "red";
+            // }
+
+            // if (isNaN(password)) {
+            //     document.getElementById("password").style.borderColor = "green";
+            // }
+            // else {
+            //     document.getElementById("password").style.borderColor = "red";
+            // }
+
+            // //remarks validations
+
+            // if (isNaN(remarks)) {
+            //     document.getElementById("remarks").style.borderColor = "green";
+            // }
+            // else {
+            //     document.getElementById("remarks").style.borderColor = "red";
+            // }
+
+            // //additionalinformation validation
+
+            // if (isNaN(additionalInformation)) {
+            //     document.getElementById("additionalinformation").style.borderColor = "green";
+            // }
+            // else {
+            //     document.getElementById("additionalinformation").style.borderColor = "red";
+            // }
+
+
+            // let genderSelected = "";
+            // let checkedOrNot = "not checker";
+            // document.getElementsByName("SupplyTime").forEach(function (e) {
+            //     if (e.checked == true) {
+            //         checkedOrNot = "checked";
+            //         genderSelected = e.value;
+            //     }
+
+            // })
+            // 
     </script>
 </body>
 
